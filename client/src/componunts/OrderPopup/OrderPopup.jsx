@@ -8,7 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import "animate.css/animate.min.css";
 import { useNavigate } from 'react-router-dom';
 import Store from "../../assets/bstore.png";
-const OrderPopup = ({ orderPopup, setOrderPopup }) => {
+
+const OrderPopup = ({ orderPopup, setOrderPopup, bookId, bookName, bookAuthor, bookPrice }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -104,31 +105,37 @@ const OrderPopup = ({ orderPopup, setOrderPopup }) => {
     }
   };
 
+  
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     if (!validateForm()) return;
-  
+
     try {
       const response = await axios.post('http://localhost:8000/login', {
         username: formData.username,
         password: formData.password,
+        order: {
+          bookId,
+          name: bookName,
+          author: bookAuthor,
+          price: bookPrice,
+          quantity: 1
+        },
       });
-  
+
       const { message, userType } = response.data;
       console.log("Login response:", response.data);
-  
+
       if (message === "Login successful") {
-        resetForm();
-  
         if (userType === 'admin') {
-          alert("Welcome to admin page!"); // Display admin-specific message
+          alert("Welcome to admin page!");
           setOrderPopup(false);
           navigate('/admin');
         } else {
-          alert(message); // Display regular user message
+          alert(message);
           setOrderPopup(false);
-          navigate('/books'); // Redirect to home page
+          navigate('/books');
         }
       } else {
         alert(message);
@@ -142,7 +149,6 @@ const OrderPopup = ({ orderPopup, setOrderPopup }) => {
       }
     }
   };
-  
 
   const resetForm = () => {
     setFormData({
@@ -313,6 +319,10 @@ const OrderPopup = ({ orderPopup, setOrderPopup }) => {
 OrderPopup.propTypes = {
   orderPopup: PropTypes.bool.isRequired,
   setOrderPopup: PropTypes.func.isRequired,
+  bookId: PropTypes.string.isRequired,
+  bookName: PropTypes.string.isRequired,
+  bookAuthor: PropTypes.string.isRequired,
+  bookPrice: PropTypes.number.isRequired,
 };
 
 export default OrderPopup;

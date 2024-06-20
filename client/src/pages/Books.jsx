@@ -29,7 +29,7 @@ const BookList = () => {
   const [pageSize] = useState(8); // Number of items per page
   const ITEMS_PER_PAGE = 8; // Same as pageSize for clarity
   const PAGINATION_MAX_PAGES = 5; // Maximum number of pagination links to display
-  const [userId, setUserId] = useState(null); // State to store userId
+  const [userId, setUserId] = useState('exampleUserId'); // Example userId state
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -325,6 +325,7 @@ const BookList = () => {
                             book={buyModalBook}
                             onClose={() => setShowBuyModal(false)}
                             onConfirm={() => handleConfirmOrder(buyModalBook)}
+                            userId={userId}
                           />
                         )}
                         {/* View More Modal */}

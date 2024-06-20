@@ -14,6 +14,8 @@ mongoose.connect('mongodb+srv://samruddhip746:YSuv0J8H63njoDJK@cluster0.bndydac.
   .catch(err => console.log(err));
 
 // Define Mongoose schema and model
+
+// Customer Schema with Embedded Orders
 const customerSchema = new mongoose.Schema({
   fullName: { type: String, required: true, minlength: 2 },
   email: { type: String, required: true, unique: true, match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
@@ -24,9 +26,11 @@ const customerSchema = new mongoose.Schema({
   userType: { type: String, required: true, enum: ['user', 'admin'], default: 'user' },
   loginTimes: [{ type: Date }],
   logoutTimes: [{ type: Date }],
+ 
 }, { timestamps: true });
 
 const Customer = mongoose.model('Customer', customerSchema);
+
 
 // Handle POST request for registration
 app.post('/', async (req, res) => {
@@ -437,6 +441,9 @@ app.get('/inquiries', async (req, res) => {
     res.status(500).json({ error: "Could not fetch inquiries" });
   }
 });
+
+
+
 
 
 const PORT = process.env.PORT || 8000;

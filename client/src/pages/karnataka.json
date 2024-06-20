@@ -1,0 +1,405 @@
+{
+  "state": "Karnataka",
+  "cities": [
+    {
+      "city": "Bangalore",
+      "hotels": [
+        {
+          "rating": "5-star",
+          "hotels": [
+            {
+              "name": "The Leela Palace Bengaluru - Garden City's Only Modern Palace Hotel",
+              "imageUrl": "https://images.venuebookingz.com/18392-1552817853-wm-leela-palace-wedding-venue-bangalore-1.jpg",
+              "address": "23, HAL Airport Road, Bangalore",
+              "prices": {
+                "Normal ": "$450 per night",
+                "Deluxe Room": "$550 per night",
+                "AC": "$750 per night"
+              }
+            },
+            {
+              "name": "Taj West End",
+              "imageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/07/f3/bf/heritage-block.jpg?w=700&h=-1&s=1",
+              "address": "Race Cou  e Road, Bangalore",
+              "prices": {
+                "Normal ": "$350 per night",
+                "Deluxe Room": "$450 per night",
+                "AC": "$650 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "4-star",
+          "hotels": [
+            {
+              "name": "Radisson Blu Atria",
+              "imageUrl": "https://img.directhotels.com/in/bangalore/radisson-blu-atria-bengaluru/1.jpg",
+              "address": "1, Palace Road, Bangalore",
+              "prices": {
+                "Normal ": "$550 per night",
+                "Deluxe Room": "$750 per night",
+                "AC": "$950 per night"
+              }
+            },
+            {
+              "name": "Fortune Select JP Cosmos",
+              "imageUrl": "https://img.easemytrip.com/EMTHotel-6495/a/large/157331_0.jpg",
+              "address": "Cunningham Crescent Road, Bangalore",
+              "prices": {
+               "Normal ": "$350 per night",
+                "Deluxe Room": "$450 per night",
+                "AC": "$550 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "3-star",
+          "hotels": [
+            {
+              "name": "Hotel Chancery",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSc6FjXVEbf_lY98chIpZ5UzDb5gjGCQUpgRg&s",
+              "address": "10/6, Lavelle Road, Bangalore",
+              "prices": {
+               "Normal ": "$350 per night",
+                "Deluxe Room": "$250 per night",
+                "AC": "$550 per night"
+              }
+            },
+            {
+              "name": "Iris Hotel",
+              "imageUrl": "https://www.panacomp.net/wp-content/uploads/2017/04/featured.jpg",
+              "address": "70, Brigade Road, Bangalore",
+              "prices": {
+                "Normal ": "$350 per night",
+                "Deluxe Room": "$450 per night",
+                "AC": "$550 per night"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "city": "Mysore",
+      "hotels": [
+        {
+          "rating": "5-star",
+          "hotels": [
+            {
+              "name": "Radisson Blu Plaza Hotel",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFFA5N6QYvYwepwS2CdY5hQdAVrWWfIkDG8A&s",
+              "address": "1, MG Road, Mysore",
+              "prices": {
+               "Normal ": "$950 per night",
+                "Deluxe Room": "$850 per night",
+                "AC": "$750 per night"
+              }
+            },
+            {
+              "name": "Lalitha Mahal Palace Hotel",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfROaC8TfzC6tCperWe1wwa3TKf3KKx009_Q&s",
+              "address": "Siddhartha Layout, Mysore",
+              "prices": {
+                "Normal ": "$750 per night",
+                "Deluxe Room": "$650 per night",
+                "AC": "$550 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "4-star",
+          "hotels": [
+            {
+              "name": "Country Inn & Suites",
+              "imageUrl": "https://media.radissonhotels.net/image/country-inn-and-suites-brand/exterior/16256-118839-f64451367_3xl.jpg?impolicy=Card",
+              "address": "345, Hardinge Circle, Mysore",
+              "prices": {
+                "Normal ": "$450 per night",
+                "Deluxe Room": "$550 per night",
+                "AC": "$750 per night"
+              }
+            },
+            {
+              "name": "Royal Orchid Brindavan Garden",
+              "imageUrl": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/129220882.jpg?k=3a3276a59c6936b08d38c8aac049cddbcb3e1cfac63ac0b0c88e39a1689624a3&o=&hp=1",
+              "address": "Krishna Raja Sagar, Mysore",
+              "prices": {
+                "Normal ": "$350 per night",
+                "Deluxe Room": "$550 per night",
+                "AC": "$750 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "3-star",
+          "hotels": [
+            {
+              "name": "Hotel Pai Vista",
+              "imageUrl": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/543588959.jpg?k=ae6e38aff263b334c3ad59e9cb36e74289c194cf02b324bc4bc9601a65942c39&o=&hp=1",
+              "address": "35/A, Bangalore-Nilgiri Road, Mysore",
+              "prices": {
+                "Normal ": "$350 per night",
+                "Deluxe Room": "$450 per night",
+                "AC": "$550 per night"
+              }
+            },
+            {
+              "name": "Hotel Sandesh The Prince",
+              "imageUrl": "https://www.bharatonline.com/hotels/hotel_master_img/2710_a.jpeg",
+              "address": "3, Nazarbad Main Road, Mysore",
+              "prices": {
+                "Normal ": "$300 per night",
+                "Deluxe Room": "$500 per night",
+                "AC": "$700 per night"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "city": "Mangalore",
+      "hotels": [
+        {
+          "rating": "5-star",
+          "hotels": [
+            {
+              "name": "The Gateway Hotel",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThiu8F4vgJDApT91zOIzYB61z5BAU3CFt_zA&s",
+              "address": "Old Port Road, Mangalore",
+              "prices": {
+                "Normal ": "$350 per night",
+                "Deluxe Room": "$550 per night",
+                "AC": "$750 per night"
+              }
+            },
+            {
+              "name": "Goldfinch Hotel",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA-j-Va3Y3rdDS_Fh7cDtPTtBr3RU  371pA&s",
+              "address": "Bunts Hostel Road, Mangalore",
+              "prices": {
+                "Normal ": "$480 per night",
+                "Deluxe Room": "$620 per night",
+                "AC": "$800 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "4-star",
+          "hotels": [
+            {
+              "name": "Hotel Ocean Pearl",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXzeQAA94lQrp9LbVBG45OTs5lzIrb7DtPhw&s",
+              "address": "Navabharath Circle, Mangalore",
+              "prices": {
+                "Normal ": "$450 per night",
+                "Deluxe Room": "$550 per night",
+                "AC": "$750 per night"
+              }
+            },
+            {
+              "name": "Hotel Deepa Comforts",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHqZt50_ljSLapSz70kUU1JOR04hnj_M6W0Q&s",
+              "address": "MG Road, Mangalore",
+              "prices": {
+                "Normal ": "$350 per night",
+                "Deluxe Room": "$550 per night",
+                "AC": "$750 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "3-star",
+          "hotels": [
+            {
+              "name": "Hotel Poonja International",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlgQHpXhjuSpoLaz2ZEJvGNGdpFqnZDgYURqxNIO7M3zmbzMm_7Nw_ZxNUdHDe6CroQqs&usqp=CAU",
+              "address": "K S Rao Road, Mangalore",
+              "prices": {
+                "Normal ": "$320 per night",
+                "Deluxe Room": "$420 per night",
+                "AC": "$520 per night"
+              }
+            },
+            {
+              "name": "Hotel Mangalore International",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjLN_PB0EawZZebAR0qGAIhIWztqqmZWyrJw&s",
+              "address": "K S Rao Road, Mangalore",
+              "prices": {
+                "Normal ": "$250 per night",
+                "Deluxe Room": "$350 per night",
+                "AC": "$450 per night"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "city": "Hubli",
+      "hotels": [
+        {
+          "rating": "5-star",
+          "hotels": [
+            {
+              "name": "Hotel Denissons",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8oK7JXyvE9igWGmHsVDTR_NEV64TUtw3nCQ&s",
+              "address": "110 Dollo   Colony, Hubli",
+              "prices": {
+                "Normal ": "$650 per night",
+                "Deluxe Room": "$750 per night",
+                "AC": "$850 per night"
+              }
+            },
+            {
+              "name": "The Hans Hotel",
+              "imageUrl": "https://www.delhihotels-booking.com/images/5-star/hotel-hans-plaza-banner.jpg",
+              "address": "PB Road, Hubli",
+              "prices": {
+                "Normal ": "$550 per night",
+                "Deluxe Room": "$650 per night",
+                "AC": "$750 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "4-star",
+          "hotels": [
+            {
+              "name": "Clarks Inn",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9mf4Z32lvuzwtm5xAvvqAm2aMV694FLe0-A&s",
+              "address": "Gokul Road, Hubli",
+              "prices": {
+                "Normal ": "$250 per night",
+                "Deluxe Room": "$350 per night",
+                "AC": "$550 per night"
+              }
+            },
+            {
+              "name": "The President Hotel",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTubgHK-CGahKpTasonaNBsU9KzO1INaZdVXg&s",
+              "address": "Airport Road, Hubli",
+              "prices": {
+                "Normal ": "$350 per night",
+                "Deluxe Room": "$450 per night",
+                "AC": "$550 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "3-star",
+          "hotels": [
+            {
+              "name": "Shree Krishna Palace",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREuHFUb-YxGpsiYIAlvodqYfXPzUSws5BXw0GOpFEK_0xeOnL1AEGgrD0&s=10",
+              "address": "Dharwad Road, Hubli",
+              "prices": {
+                "Normal ": "$590 per night",
+                "Deluxe Room": "$650 per night",
+                "AC": "$750 per night"
+              }
+            },
+            {
+              "name": "Hotel Naveen",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw-wnupm1hbXYd5gp2_NflW7T2bTBDWiRbpw&s",
+              "address": "Unkal Lake, Hubli",
+              "prices": {
+                "Normal ": "$500 per night",
+                "Deluxe Room": "$650 per night",
+                "AC": "$850 per night"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "city": "Belgaum",
+      "hotels": [
+        {
+          "rating": "5-star",
+          "hotels": [
+            {
+              "name": "Fairfield by Marriott",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWd5lKPXPujrE7YueBos_YxRLfl4Xqyzk4Yw&s",
+              "address": "Gogte Plaza, Belgaum",
+              "prices": {
+                "Normal ": "$450  per night",
+                "Deluxe Room": "$550 per night",
+                "AC": "$750 per night"
+              }
+            },
+            {
+              "name": "UK 27 The Fern",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtQio4jCZlqSb8tn6gcTZ6Dd9j  WKPcm0ZA&s",
+              "address": "CTS No. 4799, Club Road, Belgaum",
+              "prices": {
+                "Normal ": "$560 per night",
+                "Deluxe Room": "$670 per night",
+                "AC": "$780 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "4-star",
+          "hotels": [
+            {
+              "name": "Eefa Hotel",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1AYtIh88UCIMLhwtAEPZ8tgPCcFi7ZmCPHw&s",
+              "address": "Club Road, Belgaum",
+              "prices": {
+                "Normal ": "$450 per night",
+                "Deluxe Room": "$550 per night",
+                "AC": "$750 per night"
+              }
+            },
+            {
+              "name": "Hotel Sankam Residency",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREPxijAKKGeUMGDuJ39_2vcmNQ3bBjfOOGTg&s",
+              "address": "Airport Road, Belgaum",
+              "prices": {
+               "Normal ": "$320 per night",
+                "Deluxe Room": "$650 per night",
+                "AC": "$750 per night"
+              }
+            }
+          ]
+        },
+        {
+          "rating": "3-star",
+          "hotels": [
+            {
+              "name": "Hotel EEFA",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_lyv91gX1jFMQiVi65N4ZKnmf8dBfThK9wQ&s",
+              "address": "Khade Bazaar, Belgaum",
+              "prices": {
+                "Normal ": "$450 per night",
+                "Deluxe Room": "$550 per night",
+                "AC": "$750 per night"
+              }
+            },
+            {
+              "name": "Hotel Ramdev International",
+              "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq8Z9N_aW4_RwH8ZSvfKq0HMx7jKwyuUK-og&s",
+              "address": "College Road, Belgaum",
+              "prices": {
+                "Normal ": "$230 per night",
+                "Deluxe Room": "$340 per night",
+                "AC": "$450 per night"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

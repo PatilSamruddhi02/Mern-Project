@@ -110,7 +110,7 @@ const BookForm = ({ book, onClose }) => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-      <h2 className="text-2xl mb-4">{book ? 'Edit Book' : 'Add New Book'}</h2>
+      <h2 className="text-2xl mb-4 mt-20">{book ? 'Edit Book' : 'Add New Book'}</h2>
       {successMessage && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-4 rounded relative" role="alert">
           {successMessage}

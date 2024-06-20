@@ -6,7 +6,9 @@ import Footer from '../componunts/Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import OrderPopup from '../componunts/OrderPopup/OrderPopup';
-import LogoutPopup from '../pages/LogoutPopup';
+import LogoutPopup from '../pages/LogoutPopup';;
+import { faUserShield } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faEdit, faUser, faEnvelope, faBars } from '@fortawesome/free-solid-svg-icons';
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
@@ -19,9 +21,10 @@ const AdminPage = () => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false); // State for showing the logout popup
   const [orderPopup, setOrderPopup] = useState(false);
+  const [showInitialImage, setShowInitialImage] = useState(true); // State for initial image display
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Number of items per page
-  
+  const itemsPerPage = 5;
+
  
   useEffect(() => {
     const fetchUsers = async () => {
@@ -180,6 +183,7 @@ const AdminPage = () => {
     setSelectedBook(null);
     setShowBookForm(true);
     setActiveSection('bookForm');
+    setShowInitialImage(false);
   };
 
   const handleShowUserDetailsClick = () => {
@@ -204,46 +208,121 @@ const AdminPage = () => {
     }
   };
   
+    // Calculate total pages
+    const totalItems = books.reduce((total, publisher) => {
+      publisher.authors.forEach(author => {
+        total += author.books.length;
+      });
+      return total;
+    }, 0);
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
   
+    // Get current books to display
+    const getCurrentBooks = () => {
+      const flatBooks = books.reduce((acc, publisher) => {
+        publisher.authors.forEach(author => {
+          author.books.forEach(book => {
+            acc.push({ publisher: publisher.publisher, book, author });
+          });
+        });
+        return acc;
+      }, []);
+  
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      return flatBooks.slice(startIndex, endIndex);
+    };
+
+   // Pagination Logic based on loginTimes
+  const allLoginTimes = users.flatMap(user => user.loginTimes);
+  const totalLoginItems = allLoginTimes.length;
+  const totalLoginPages = Math.ceil(totalLoginItems / itemsPerPage);
+  const getCurrentLogins = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return allLoginTimes.slice(startIndex, endIndex);
+  };
+  
+   // Pagination Logic for User Inquiries Section
+   const totalInquiryItems = inquiries.length;
+   const totalInquiryPages = Math.ceil(totalInquiryItems / itemsPerPage);
+   const getCurrentInquiries = () => {
+     const startIndex = (currentPage - 1) * itemsPerPage;
+     const endIndex = startIndex + itemsPerPage;
+     return inquiries.slice(startIndex, endIndex);
+   };
   return (
     <div>
-      <nav className="bg-gradient-to-r from-primary to-secondary text-white p-4 fixed top-0 left-0 right-0 z-10 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-white text-2xl">Admin Dashboard</h1>
-          <button className="bg-gray-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-gray-600 transition-colors duration-200" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
+      
+    <div className="flex ">
+      {/* Left Sidebar */}
+      <nav className="bg-gradient-to-r from-primary to-secondary h-auto w-56 px-4 py-8 overflow-y-auto">
+        <h2 className="text-3xl font-semibold mb-4 mt-16 text-center font-bold"> Dashboard Menu</h2>
+        <ul className="space-y-2 text-xl">
+          <li>
+            
+            <button
+              className={`w-full py-2 px-4 rounded-md text-left ${activeSection === 'bookForm' && showBookForm ? 'bg-blue-500 text-white' : 'hover:bg-gray-300'}`}
+              onClick={handleBookNowClick}
+            >
+                <FontAwesomeIcon icon={faBook} className="mr-2" />
+              Add Book Now
+            </button>
+          </li>
+          <li>
+            <button
+              className={`w-full py-2 px-4 rounded-md text-left ${activeSection === 'bookDetails' ? 'bg-purple-500 text-white' : 'hover:bg-gray-300'}`}
+              onClick={handleShowBookDetailsClick}
+            >
+              <FontAwesomeIcon icon={faEdit} className="mr-2" />
+              Update Book Details
+            </button>
+          </li>
+          <li>
+            <button
+              className={`w-full py-2 px-4 rounded-md text-left ${activeSection === 'userDetails' ? 'bg-yellow-500 text-white' : 'hover:bg-gray-300'}`}
+              onClick={handleShowUserDetailsClick}
+            >
+               <FontAwesomeIcon icon={faUser} className="mr-2" />
+              Show User Details
+            </button>
+          </li>
+          <li>
+            <button
+              className={`w-full py-2 px-4 rounded-md text-left ${activeSection === 'userInquiries' ? 'bg-red-500 text-white' : 'hover:bg-gray-300'}`}
+              onClick={handleShowUserInquiriesClick}
+            >
+               <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+              Show User Inquiries
+            </button>
+          </li>
+        </ul>
       </nav>
+     
+      {/* Right Content Area */}
+      <div className="flex-1 overflow-y-auto ">
+      <nav className="bg-gradient-to-r from-primary to-secondary text-white p-4 shadow-md fixed top-0 left-0 right-0 z-10 mb-50">
+  <div className="container mx-auto flex justify-between items-center">
+    <div className="flex items-center">
+      <FontAwesomeIcon icon={faUserShield} className="h-10 w-10 text-white mr-2 ml-10" />
+      <h1 className="text-white text-3xl font-bold">Admin Dashboard</h1>
+    </div>
+    <button className="bg-gray-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-gray-600 transition-colors duration-200" onClick={handleLogout}>
+      Logout
+    </button>
+  </div>
+</nav>
 
-      <div className="container mx-auto p-4 mt-20">
-        <h1 className="text-3xl mb-4 text-center">Welcome to Admin Page</h1>
-        <div className="flex justify-center space-x-4 mb-8">
-          <button
-            className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-blue-500 hover:to-green-400 text-white py-2 px-6 rounded-md shadow-lg transform transition-transform duration-300 hover:scale-105"
-            onClick={handleBookNowClick}
-          >
-            Add Book Now
-          </button>
-          <button
-            className="bg-gradient-to-r from-purple-400 to-pink-500 hover:from-pink-500 hover:to-purple-400 text-white py-2 px-6 rounded-md shadow-lg transform transition-transform duration-300 hover:scale-105"
-            onClick={handleShowBookDetailsClick}
-          >
-            Update Book Details
-          </button>
-          <button
-            className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-orange-500 hover:to-yellow-400 text-white py-2 px-6 rounded-md shadow-lg transform transition-transform duration-300 hover:scale-105"
-            onClick={handleShowUserDetailsClick}
-          >
-            Show User Details
-          </button>
-          <button
-            className="bg-gradient-to-r from-red-400 to-pink-500 hover:from-pink-500 hover:to-red-400 text-white py-2 px-6 rounded-md shadow-lg transform transition-transform duration-300 hover:scale-105"
-            onClick={handleShowUserInquiriesClick}
-          >
-            Show User Inquiries
-          </button>
-        </div>
+
+        
+         {/* Initial Image Section */}
+         {showInitialImage && (
+          <div className="flex justify-center items-center h-screen ">
+            <img src="https://st2.depositphotos.com/34031690/46736/v/450/depositphotos_467366440-stock-illustration-flat-isometric-vector-illustration-isolated.jpg" alt="Initial Image" className="w-1/2  ml-4" />
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7TqlpoT_n42bKhuH2K-KRrMvyCueCoUsYAw&usqp=CAU" alt="Initial Image" className="w-1/2 h-full " />
+          
+          </div>
+        )}
 
         {activeSection === 'bookForm' && showBookForm && (
           <BookForm
@@ -254,134 +333,148 @@ const AdminPage = () => {
         )}
 
 {activeSection === 'userDetails' && (
-  <div className="overflow-x-auto">
-    <table className="w-full border-collapse border border-gray-300 shadow-md rounded-md">
-      <thead className="bg-gradient-to-r from-primary to-secondary text-white">
-        <tr>
-          <th className="border border-gray-300 px-4 py-2 text-left">Full Name</th>
-          <th className="border border-gray-300 px-4 py-2 text-left">Mobile</th>
-          <th className="border border-gray-300 px-4 py-2 text-left">Username</th>
-          <th className="border border-gray-300 px-4 py-2 text-left">Login Times</th>
-          <th className="border border-gray-300 px-4 py-2 text-left">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {users.map((user) => (
-          <tr key={user._id} className="bg-white hover:bg-gray-100 transition-colors duration-200">
-            <td className="border border-gray-300 px-4 py-2">{user.fullName}</td>
-            <td className="border border-gray-300 px-4 py-2">{user.mobile}</td>
-            <td className="border border-gray-300 px-4 py-2">{user.username}</td>
-            <td className="border border-gray-400 px-4 py-2">
-              <table>
-                <tbody>
-                  {formatLoginTimes(user.loginTimes)}
-                </tbody>
-              </table>
-            </td>
-           
-
-            <td className="border border-gray-300 px-4 py-2 space-x-2">
-              <button
-                className="bg-green-500 text-white py-1 px-2 rounded-md hover:bg-green-600 transition-colors duration-200"
-                onClick={() => {
-                  const newLoginTimes = prompt('Enter new login times (comma separated):')?.split(',').map(time => new Date(time).toISOString());
-                  if (newLoginTimes) {
-                    editLoginTimes(user._id, newLoginTimes);
-                  }
-                }}
-              >
-                Edit
-              </button>
-              <button
-                className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600 transition-colors duration-200"
-                onClick={() => deleteUser(user._id)}
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-
-    
-  </div>
-)}
-
-
-        {activeSection === 'bookDetails' && (
-          <div>
-            <h2 className="text-2xl mb-4">Book Details Section</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border border-gray-400 shadow-md">
-                <thead className="bg-gradient-to-r from-primary to-secondary text-white">
-                  <tr>
-                    <th className="border border-gray-400 px-4 py-2 text-center">Publisher Name</th>
-                    <th className="border border-gray-400 px-4 py-2 text-center">Author Name</th>
-                    <th className="border border-gray-400 px-4 py-2 text-center">Book Name</th>
-                    <th className="border border-gray-400 px-4 py-2 text-center">Year</th>
-                    <th className="border border-gray-400 px-4 py-2 text-center">Price</th>
-                    <th className="border border-gray-400 px-4 py-2 text-center">Total Copies</th>
-                    <th className="border border-gray-400 px-4 py-2 text-center">Available Copies</th>
-                    <th className="border border-gray-400 px-4 py-2 text-center">Purchased Copies</th>
-                    <th className="border border-gray-400 px-4 py-2 text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {books.reduce((acc, publisher) => {
-                    publisher.authors.forEach(author => {
-                      author.books.forEach(book => {
-                        const existingRow = acc.find(row => row.publisher === publisher.publisher);
-                        if (existingRow) {
-                          existingRow.books.push({ book, author }); // Pushing the book with author
-                        } else {
-                          acc.push({
-                            publisher: publisher.publisher,
-                            books: [{ book, author }]
-                          });
-                        }
-                      });
-                    });
-                    return acc;
-                  }, []).map((group, groupIndex) => (
-                    <React.Fragment key={groupIndex}>
-                      {group.books.map((item, index) => (
-                        <tr key={item.book._id} className="bg-white hover:bg-gray-100 transition-colors duration-200">
-                          {index === 0 && (
-                            <td className="border border-gray-400 px-4 py-2 text-center" rowSpan={group.books.length}>{group.publisher}</td>
-                          )}
-                          <td className="border border-gray-400 px-4 py-2 text-center">{item.author.authorName}</td>
-                          <td className="border border-gray-400 px-4 py-2 text-center">{item.book.name}</td>
-                          <td className="border border-gray-400 px-4 py-2 text-center">{item.book.year}</td>
-                          <td className="border border-gray-400 px-4 py-2 text-center">{item.book.price}</td>
-                          <td className="border border-gray-400 px-4 py-2 text-center">{item.book.copies}</td>
-                          <td className="border border-gray-400 px-4 py-2 text-center">{item.book.availableCopies}</td>
-                          <td className="border border-gray-400 px-4 py-2 text-center">{item.book.purchasedCopies}</td>
-                          <td className="border border-gray-400 px-4 py-2 text-center">
-                            <button
-                              className="text-green-500 py-1 px-1 rounded-md mr-1 hover:bg-green-600 transition-colors duration-200"
-                              onClick={() => handleEditBookClick(item.book)}
-                            >
-                              <span role="img" aria-label="edit">✏️</span>
-                            </button>
-                            <button
-                              className="text-red-500 py-1 px-1 rounded-md mr-1 hover:bg-green-600 transition-colors duration-200"
-                              onClick={() => deleteBook(item.book._id)}
-                            >
-                              <FontAwesomeIcon icon={faTrash} />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </React.Fragment>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+        <div>
+          <h2 className="text-2xl mb-4 mt-20 text-center">Users Details Section</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-gray-300 shadow-md rounded-md">
+              <thead className="bg-gradient-to-r from-primary to-secondary text-white">
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Full Name</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Mobile</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Username</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Login Times</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getCurrentLogins().map((loginTime, index) => {
+                  const user = users.find(user => user.loginTimes.includes(loginTime));
+                  return (
+                    <tr key={index} className="bg-white hover:bg-gray-100 transition-colors duration-200">
+                      <td className="border border-gray-300 px-4 py-2">{user.fullName}</td>
+                      <td className="border border-gray-300 px-4 py-2">{user.mobile}</td>
+                      <td className="border border-gray-300 px-4 py-2">{user.username}</td>
+                      <td className="border border-gray-400 px-4 py-2">{new Date(loginTime).toLocaleString()}</td>
+                      <td className="border border-gray-300 px-4 py-2 space-x-2">
+                        <button
+                          className="bg-green-500 text-white py-1 px-2 rounded-md hover:bg-green-600 transition-colors duration-200"
+                          onClick={() => {
+                            const newLoginTimes = prompt('Enter new login times (comma separated):')?.split(',').map(time => new Date(time).toISOString());
+                            if (newLoginTimes) {
+                              editLoginTimes(user._id, newLoginTimes);
+                            }
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600 transition-colors duration-200"
+                          onClick={() => deleteUser(user._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
-        )}
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-4">
+            <button
+              className="mx-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">{`Page ${currentPage} of ${totalLoginPages}`}</span>
+            <button
+              className="mx-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalLoginPages))}
+              disabled={currentPage === totalLoginPages}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
+
+{activeSection === 'bookDetails' && (
+        <div>
+          <h2 className="text-2xl mb-4 mt-20 text-center">Book Details Section</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-gray-400 shadow-md">
+              <thead className="bg-gradient-to-r from-primary to-secondary text-white">
+                <tr>
+                  <th className="border border-gray-400 px-4 py-2 text-center">Publisher Name</th>
+                  <th className="border border-gray-400 px-4 py-2 text-center">Author Name</th>
+                  <th className="border border-gray-400 px-4 py-2 text-center">Book Name</th>
+                  <th className="border border-gray-400 px-4 py-2 text-center">Year</th>
+                  <th className="border border-gray-400 px-4 py-2 text-center">Price</th>
+                  <th className="border border-gray-400 px-4 py-2 text-center">Total Copies</th>
+                  <th className="border border-gray-400 px-4 py-2 text-center">Available Copies</th>
+                  <th className="border border-gray-400 px-4 py-2 text-center">Purchased Copies</th>
+                  <th className="border border-gray-400 px-4 py-2 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getCurrentBooks().map((item, index) => (
+                  <tr key={item.book._id} className="bg-white hover:bg-gray-100 transition-colors duration-200">
+                    {index === 0 && (
+                      <td className="border border-gray-400 px-4 py-2 text-center" rowSpan={itemsPerPage}>{item.publisher}</td>
+                    )}
+                    <td className="border border-gray-400 px-4 py-2 text-center">{item.author.authorName}</td>
+                    <td className="border border-gray-400 px-4 py-2 text-center">{item.book.name}</td>
+                    <td className="border border-gray-400 px-4 py-2 text-center">{item.book.year}</td>
+                    <td className="border border-gray-400 px-4 py-2 text-center">{item.book.price}</td>
+                    <td className="border border-gray-400 px-4 py-2 text-center">{item.book.copies}</td>
+                    <td className="border border-gray-400 px-4 py-2 text-center">{item.book.availableCopies}</td>
+                    <td className="border border-gray-400 px-4 py-2 text-center">{item.book.purchasedCopies}</td>
+                    <td className="border border-gray-400 px-4 py-2 text-center">
+                      <button
+                        className="text-green-500 py-1 px-1 rounded-md mr-1 hover:bg-green-600 transition-colors duration-200"
+                        onClick={() => handleEditBookClick(item.book)}
+                      >
+                        <span role="img" aria-label="edit">✏️</span>
+                      </button>
+                      <button
+                        className="text-red-500 py-1 px-1 rounded-md mr-1 hover:bg-red-600 transition-colors duration-200"
+                        onClick={() => deleteBook(item.book._id)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-4">
+            <button
+              className="mx-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+            <button
+              className="mx-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
 {activeSection === 'userInquiries' && (
+        <div>
+          <h2 className="text-2xl mb-4 mt-20 text-center">Users Inquiries Section</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse border border-gray-300 shadow-md rounded-md">
               <thead className="bg-gradient-to-r from-primary to-secondary text-white">
@@ -394,7 +487,7 @@ const AdminPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {inquiries.map(inquiry => (
+                {getCurrentInquiries().map(inquiry => (
                   <tr key={inquiry._id} className="bg-white hover:bg-gray-100 transition-colors duration-200">
                     <td className="border border-gray-300 px-4 py-2">{inquiry.fullName}</td>
                     <td className="border border-gray-300 px-4 py-2">{inquiry.email}</td>
@@ -406,11 +499,32 @@ const AdminPage = () => {
               </tbody>
             </table>
           </div>
-        )}
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-4">
+            <button
+              className="mx-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">{`Page ${currentPage} of ${totalInquiryPages}`}</span>
+            <button
+              className="mx-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalInquiryPages))}
+              disabled={currentPage === totalInquiryPages}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
+      </div>
       </div>
       <Footer />
       <OrderPopup orderPopup={orderPopup} setOrderPopup={setOrderPopup} />
     </div>
+   
   );
 };
 
