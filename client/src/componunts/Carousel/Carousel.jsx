@@ -30,17 +30,17 @@ const CarouselBasicExample = () => {
   const carouselItems = [
     {
       id: 1,
-      imgUrl: 'https://static01.nyt.com/images/2017/05/11/t-magazine/bookstore-slide-2MCD/bookstore-slide-2MCD-superJumbo.jpg',
+      imgUrl: 'https://www.bookswagon.com/bannerimages/80_inr.jpg?v=5.2',
       label: 'Embark on Literary Journeys. Explore New Worlds Between Pages!',
     },
     {
       id: 2,
-      imgUrl: 'https://thelagirl.com/wp-content/uploads/2017/04/Los-Angeles-Bookstores.jpg',
+      imgUrl: 'https://www.bookswagon.com/bannerimages/85_inr.jpg?v=5.2',
       label: 'Delve into Stories. Uncover Treasures of the Written Word!',
     },
     {
       id: 3,
-      imgUrl: 'https://freshcup.com/wp-content/uploads/2023/05/20221111-nov-4-1024x682.jpg',
+      imgUrl: 'https://www.bookswagon.com/bannerimages/89_inr.jpg',
       label: 'Ignite Your Imagination. Let Books Paint the Colors of Your Dreams!',
     },
   

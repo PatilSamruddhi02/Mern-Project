@@ -8,7 +8,8 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import OrderPopup from '../componunts/OrderPopup/OrderPopup';
 import LogoutPopup from '../pages/LogoutPopup';;
 import { faUserShield } from '@fortawesome/free-solid-svg-icons';
-import { faBook, faEdit, faUser, faEnvelope, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faEdit, faUser, faEnvelope, faBars,faShoppingCart ,faSignOutAlt,faComments} from '@fortawesome/free-solid-svg-icons';
+import Charts from '../pages/Charts'; // Adjust the path as necessary
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
@@ -24,8 +25,12 @@ const AdminPage = () => {
   const [showInitialImage, setShowInitialImage] = useState(true); // State for initial image display
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-
+  const [showPurchaseDetails, setShowPurchaseDetails] = useState(false);
+  const [purchaseDetails, setPurchaseDetails] = useState([]);
  
+  const [feedbackList, setFeedbackList] = useState([]);
+
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -178,7 +183,43 @@ const AdminPage = () => {
     }
   };
 
+  const handleShowPurchaseDetailsClick = async () => {
+    console.log('Attempting to fetch purchase details...');
+    try {
+      const response = await axios.get('http://localhost:8000/api/purchases');
+      console.log('Purchase details data:', response.data);
+      setPurchaseDetails(response.data); // Assuming setPurchaseDetails is a state setter
+      setShowPurchaseDetails(true); // Assuming setShowPurchaseDetails is a state setter
+      setActiveSection('purchaseDetails'); // Ensure this is being set correctly
+    } catch (error) {
+      console.error('Error fetching purchase details:', error);
+      // Handle error state or display an error message to the user
+    }
+  };
 
+
+ 
+
+  useEffect(() => {
+    fetchFeedbackList(); // Fetch feedback data when component mounts
+  }, []);
+
+  const fetchFeedbackList = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/feedback-list');
+      setFeedbackList(response.data); // Update feedbackList state with fetched data
+      setActiveSection('userFeedback'); // Set active section after fetching data
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
+    }
+  };
+
+  const renderStarRating = (rating) => {
+    // Implement your logic to render star ratings based on 'rating'
+    // Example: return a string of stars or a component representing the rating
+    return ` ${rating}`;
+  };
+  
   const handleBookNowClick = () => {
     setSelectedBook(null);
     setShowBookForm(true);
@@ -196,7 +237,7 @@ const AdminPage = () => {
   };
 
   const handleLogout = () => {
-    setOrderPopup(true);
+     window.location.href = '/';
   };
   const editLogoutTimes = async (userId, newLogoutTimes) => {
     try {
@@ -251,6 +292,15 @@ const AdminPage = () => {
      const endIndex = startIndex + itemsPerPage;
      return inquiries.slice(startIndex, endIndex);
    };
+  // Pagination Logic for Purchase Details Section
+  const totalPurchaseItems = purchaseDetails.length;
+  const totalPurchasePages = Math.ceil(totalPurchaseItems / itemsPerPage);
+  const getCurrentPurchases = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return purchaseDetails.slice(startIndex, endIndex);
+  };
+
   return (
     <div>
       
@@ -267,6 +317,35 @@ const AdminPage = () => {
             >
                 <FontAwesomeIcon icon={faBook} className="mr-2" />
               Add Book Now
+            </button>
+          </li>
+          <li className="mb-4">
+  <button
+      className={`w-full py-2 px-4 rounded-md text-left ${activeSection === 'purchaseDetails' ? 'bg-green-500 text-white' : 'hover:bg-gray-300'}`}
+    onClick={handleShowPurchaseDetailsClick}
+  >
+    <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
+    Book Purchased Details
+  </button>
+</li>
+
+
+            <li>
+            <button
+              className={`w-full py-2 px-4 rounded-md text-left ${activeSection === 'userInquiries' ? 'bg-red-500 text-white' : 'hover:bg-gray-300'}`}
+              onClick={handleShowUserInquiriesClick}
+            >
+               <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+              Show User Inquiries
+            </button>
+          </li>
+          <li>
+            <button
+              className={`w-full py-2 px-4 rounded-md text-left ${activeSection === 'userFeedback' ? 'bg-indigo-500 text-white' : 'hover:bg-gray-300'}`}
+              onClick={fetchFeedbackList}
+            >
+              <FontAwesomeIcon icon={faComments} className="mr-2" />
+              Show User Feedback
             </button>
           </li>
           <li>
@@ -287,15 +366,9 @@ const AdminPage = () => {
               Show User Details
             </button>
           </li>
-          <li>
-            <button
-              className={`w-full py-2 px-4 rounded-md text-left ${activeSection === 'userInquiries' ? 'bg-red-500 text-white' : 'hover:bg-gray-300'}`}
-              onClick={handleShowUserInquiriesClick}
-            >
-               <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
-              Show User Inquiries
-            </button>
-          </li>
+          
+         
+          
         </ul>
       </nav>
      
@@ -308,21 +381,30 @@ const AdminPage = () => {
       <h1 className="text-white text-3xl font-bold">Admin Dashboard</h1>
     </div>
     <button className="bg-gray-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-gray-600 transition-colors duration-200" onClick={handleLogout}>
-      Logout
+    
+    <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />  Logout
     </button>
   </div>
 </nav>
 
 
         
-         {/* Initial Image Section */}
-         {showInitialImage && (
+      {/* Initial Charts Section */}
+      {showInitialImage && (
+         <div className="flex justify-center items-center h-screen">
+          <Charts />
+        </div>
+      )}
+      
+
+       {/* Initial Image Section */}
+       {/* {showInitialImage && (
           <div className="flex justify-center items-center h-screen ">
             <img src="https://st2.depositphotos.com/34031690/46736/v/450/depositphotos_467366440-stock-illustration-flat-isometric-vector-illustration-isolated.jpg" alt="Initial Image" className="w-1/2  ml-4" />
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7TqlpoT_n42bKhuH2K-KRrMvyCueCoUsYAw&usqp=CAU" alt="Initial Image" className="w-1/2 h-full " />
           
           </div>
-        )}
+        )} */}
 
         {activeSection === 'bookForm' && showBookForm && (
           <BookForm
@@ -519,6 +601,92 @@ const AdminPage = () => {
           </div>
         </div>
       )}
+
+
+{activeSection === 'userFeedback' && (
+        <div>
+          <h2 className="text-2xl mb-4 mt-20 text-center">User Feedback Section</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-gray-300 shadow-md rounded-md">
+              <thead className="bg-gradient-to-r from-primary to-secondary text-white">
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Sr. No.</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Address</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Rating</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Message</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {feedbackList.map((feedback, index) => (
+                  <tr key={feedback._id} className="bg-white hover:bg-gray-100 transition-colors duration-200">
+                    <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
+                    <td className="border border-gray-300 px-4 py-2">{feedback.name}</td>
+                    <td className="border border-gray-300 px-4 py-2">{feedback.address}</td>
+                    <td className="border border-gray-300 px-4 py-2">{renderStarRating(feedback.rating)}</td>
+                    <td className="border border-gray-300 px-4 py-2">{feedback.comment}</td>
+                    <td className="border border-gray-300 px-4 py-2">{new Date(feedback.createdAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+{activeSection === 'purchaseDetails' && (
+        <div>
+          <h2 className="text-2xl mb-4 mt-20 text-center">Book Purchase Details</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-gray-300 shadow-md rounded-md">
+              <thead className="bg-gradient-to-r from-primary to-secondary text-white">
+                <tr>
+                  <th className="border-b border-gray-400 py-2 px-4">Customer Name</th>
+                  <th className="border-b border-gray-400 py-2 px-4">Publisher Name</th>
+                  <th className="border-b border-gray-400 py-2 px-4">Book Name</th>
+                  <th className="border-b border-gray-400 py-2 px-4">Price</th>
+                  <th className="border-b border-gray-400 py-2 px-4">Quantity</th>
+                  <th className="border-b border-gray-400 py-2 px-4">Total Price</th>
+                  <th className="border-b border-gray-400 py-2 px-4">Purchase Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getCurrentPurchases().map((purchase, index) => (
+                  <tr key={index} className="bg-white hover:bg-gray-100 transition-colors duration-200">
+                    <td className="border-b border-gray-400 py-2 px-4">{purchase.customerName}</td>
+                    <td className="border-b border-gray-400 py-2 px-4">{purchase.publisherName}</td>
+                    <td className="border-b border-gray-400 py-2 px-4">{purchase.bookName}</td>
+                    <td className="border-b border-gray-400 py-2 px-4">${purchase.price}</td>
+                    <td className="border-b border-gray-400 py-2 px-4">{purchase.quantity}</td>
+                    <td className="border-b border-gray-400 py-2 px-4">${purchase.totalPrice}</td>
+                    <td className="border-b border-gray-400 py-2 px-4">{new Date(purchase.purchaseDate).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-4">
+            <button
+              className="mx-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">{`Page ${currentPage} of ${totalPurchasePages}`}</span>
+            <button
+              className="mx-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPurchasePages))}
+              disabled={currentPage === totalPurchasePages}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
+
       </div>
       </div>
       <Footer />

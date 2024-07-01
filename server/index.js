@@ -4,6 +4,15 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const app = express();
 
+
+// Set EJS as the view engine
+app.set('view engine', 'ejs'); // Assuming you're using EJS for rendering
+
+// Define middleware and routes
+
+app.use(express.urlencoded({ extended: true }));
+
+
 app.use(cors());
 app.use(express.json()); // Middleware to parse JSON bodies
 
@@ -48,15 +57,29 @@ app.post('/', async (req, res) => {
   }
 });
 
+// Middleware to authenticate user (mock example)
+const authenticateUser = async (req, res, next) => {
+  const { userId } = req.body; // Assuming userId is sent in request body for simplicity
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  req.customer = await Customer.findById(userId);
+  if (!req.customer) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  next();
+};
 
-// Handle GET request for fetching all users
+
+
+// Fetch all customers
 app.get('/users', async (req, res) => {
   try {
-    const users = await Customer.find();
-    res.json(users);
+    const customers = await Customer.find();
+    res.json(customers);
   } catch (err) {
-    console.error("Error fetching users:", err);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error fetching customers:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -80,6 +103,7 @@ app.put('/users/:userId/logout-time', async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 // Handle DELETE request for deleting a user
 app.delete('/users/:userId', async (req, res) => {
@@ -442,6 +466,175 @@ app.get('/inquiries', async (req, res) => {
   }
 });
 
+
+
+
+const purchaseSchema = new mongoose.Schema({
+  customer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Customer',
+    required: true
+  },
+  customerName: {
+    type: String,
+    required: true
+  },
+  publisherName: {
+    type: String,
+    required: true
+  },
+  bookName: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true
+  },
+  totalPrice: {
+    type: Number,
+    required: true
+  },
+  purchaseDate: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Purchase = mongoose.model('Purchase', purchaseSchema);
+
+// Example GET endpoint to fetch user by ID
+app.get('/users/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const customer = await Customer.findById(userId);
+    if (!customer) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+    res.json(customer);
+  } catch (error) {
+    console.error('Error fetching customer:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+// Create purchase
+app.post('/api/purchases', async (req, res) => {
+  try {
+    const { customerId, customerName, publisherName, bookName, price, quantity, totalPrice, purchaseDate } = req.body;
+    if (!customerId || !customerName || !publisherName || !bookName || !price || !quantity || !totalPrice) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const customer = await Customer.findById(customerId);
+    if (!customer) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+
+    const newPurchase = new Purchase({
+      customer: customerId,
+      customerName,
+      publisherName,
+      bookName,
+      price,
+      quantity,
+      totalPrice,
+      purchaseDate: purchaseDate || Date.now()
+    });
+
+    const savedPurchase = await newPurchase.save();
+    res.status(201).json(savedPurchase);
+  } catch (err) {
+    console.error('Error adding purchase:', err);
+    res.status(500).json({ error: 'Could not add purchase' });
+  }
+});
+
+// Example GET endpoint to fetch all purchases
+app.get('/api/purchases', async (req, res) => {
+  try {
+    const purchases = await Purchase.find().populate('customer', 'fullName email'); // Assuming 'customer' is a reference to Customer model
+    res.json(purchases);
+  } catch (error) {
+    console.error('Error fetching purchases:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/inquiryCount', async (req, res) => {
+  try {
+    const count = await Inquiry.countDocuments(); // Get count of inquiries from MongoDB
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching inquiry count:', error);
+    res.status(500).json({ error: 'Failed to fetch inquiry count' });
+  }
+});
+
+
+
+
+
+const feedbackSchema = new mongoose.Schema({
+  rating: {
+    type: Number,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Feedback = mongoose.model('Feedback', feedbackSchema);
+
+// Define route for submitting feedback
+app.post('/submit-feedback', async (req, res) => {
+  const { rating, name, address, comment } = req.body;
+
+  try {
+    const newFeedback = new Feedback({
+      rating,
+      name,
+      address,
+      comment,
+    });
+
+    await newFeedback.save();
+    res.status(201).json({ message: 'Feedback submitted successfully' });
+  } catch (error) {
+    console.error('Error saving feedback:', error);
+    res.status(500).json({ error: 'Failed to submit feedback' });
+  }
+});
+
+// Define route for fetching feedback list
+app.get('/feedback-list', async (req, res) => {
+  try {
+    const feedbackList = await Feedback.find().sort({ createdAt: -1 });
+    res.json(feedbackList); // Return feedbackList as JSON response
+  } catch (error) {
+    console.error('Error fetching feedback:', error);
+    res.status(500).json({ error: 'Failed to fetch feedback' });
+  }
+});
 
 
 

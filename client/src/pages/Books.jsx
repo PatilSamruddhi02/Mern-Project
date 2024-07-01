@@ -10,6 +10,8 @@ import BookInquiryForm from "../pages/BookInquiryForm";
 import Store from "../assets/BookWorm Haven.png";
 import OrderPopup from '../componunts/OrderPopup/OrderPopup';
 import Carousel from '../componunts/Carousel/Carousel';
+import { faHeart, faSignOutAlt, faClipboardList,faComment } from '@fortawesome/free-solid-svg-icons';
+import FeedbackForm from '../componunts/FeedbackForm/FeedbackForm';
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -30,6 +32,8 @@ const BookList = () => {
   const ITEMS_PER_PAGE = 8; // Same as pageSize for clarity
   const PAGINATION_MAX_PAGES = 5; // Maximum number of pagination links to display
   const [userId, setUserId] = useState('exampleUserId'); // Example userId state
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false); // State to show/hide feedback form
+
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -77,13 +81,7 @@ const BookList = () => {
     }));
   };
 
-  const deleteLike = (bookId) => {
-    setLikedBooks((prev) => {
-      const newLikes = { ...prev };
-      delete newLikes[bookId];
-      return newLikes;
-    });
-  };
+ 
 
   const toggleShowFavorites = () => {
     setShowFavorites(!showFavorites);
@@ -135,6 +133,12 @@ const BookList = () => {
     setShowConfirmedOrders(!showConfirmedOrders);
   };
 
+  const handleLogout = () => {
+    // Perform any logout operations if needed
+  
+    // Navigate to the home page
+    window.location.href = '/'; // Replace '/' with your home page URL if it's different
+  };
   
 
   if (loading) {
@@ -145,7 +149,7 @@ const BookList = () => {
     return <div>{error}</div>;
   }
 
-  const filteredBooks = books.filter((book) => {
+  let filteredBooks = books.filter((book) => {
     const searchLower = searchTerm.toLowerCase();
     return (
       book.name.toLowerCase().includes(searchLower) ||
@@ -154,6 +158,14 @@ const BookList = () => {
     );
   });
 
+  if (showFavorites) {
+    filteredBooks = filteredBooks.filter((book) => likedBooks[book._id]);
+  }
+
+  if (showConfirmedOrders) {
+    filteredBooks = filteredBooks.filter((book) => confirmedOrders[book._id]);
+  }
+
   // Calculate pagination
   const totalPages = Math.ceil(filteredBooks.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
@@ -161,14 +173,9 @@ const BookList = () => {
   const paginatedBooks = filteredBooks.slice(startIndex, endIndex);
 
   // Handle pagination click
-
-  // Your handleLogout function using userId
-  const handleLogout = () => {
-    setOrderPopup(true);
+  const handleClickPage = (page) => {
+    setCurrentPage(page);
   };
-
-
-  
 
   const likedBooksCount = Object.values(likedBooks).filter(Boolean).length;
   const confirmedOrdersCount = Object.keys(confirmedOrders).length;
@@ -177,39 +184,61 @@ const BookList = () => {
     <div>
       {/* Navigation */}
       <nav className="bg-gradient-to-r from-primary to-secondary text-white p-2 fixed top-0 left-0 right-0 z-10">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-white text-2xl flex items-center">
-            <img src={Store} alt="Logo" className="h-16 w-36" />
-          </h1>
-          <div className="flex items-center space-x-4 ">
-            <button
-              onClick={toggleShowFavorites}
-              className={`py-1 px-4 rounded-md text-white transform transition-transform hover:scale-110 ${showFavorites ? 'bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'}`}
+      <div className="container flex justify-between items-center">
+        <h1 className="text-white text-2xl flex items-center">
+          <img src={Store} alt="Logo" className="h-20 w-30" />
+        </h1>
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={toggleShowFavorites}
+            className={`py-1 px-4 rounded-md text-white transform transition-transform hover:scale-110 ${
+              showFavorites ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-gradient-to-r from-primary to-secondary hover:bg-blue-600'
+            }`}
+          >
+            <FontAwesomeIcon icon={faHeart} className="mr-2" />
+            {showFavorites ? 'Show All Books' : `Show Favorites List (${likedBooksCount})`}
+          </button>
+          <button
+            onClick={toggleShowConfirmedOrders}
+            className={`py-1 px-4 rounded-md text-white transform transition-transform hover:scale-110 ${
+              showConfirmedOrders ? 'bg-green-600' : 'bg-gradient-to-r from-primary to-secondary hover:bg-green-600'
+            }`}
+          >
+            <FontAwesomeIcon icon={faClipboardList} className="mr-2" />
+            {showConfirmedOrders ? 'Show All Books' : `My Orders (${confirmedOrdersCount})`}
+          </button>
+          <button
+              onClick={() => setShowFeedbackForm(!showFeedbackForm)}
+              className="bg-gradient-to-r from-primary to-secondary py-1 px-4 rounded-md text-white transform transition-transform hover:scale-110"
             >
-              {showFavorites ? 'Show All Books' : `Show Favorites List (${likedBooksCount})`}
+              <FontAwesomeIcon icon={faComment} className="mr-2" />
+              Feedback
             </button>
-            <button
-              onClick={toggleShowConfirmedOrders}
-              className={`py-1 px-4 rounded-md text-white transform transition-transform hover:scale-110 ${showConfirmedOrders ? 'bg-green-600' : 'bg-green-500 hover:bg-green-600'}`}
-            >
-              {showConfirmedOrders ? 'Show All Books' : `My Orders (${confirmedOrdersCount})`}
-            </button>
-            <button
-  onClick={handleLogout}
-  className="py-1 px-4 rounded-md text-white transform transition-transform hover:scale-110 bg-gradient-to-r from-red-600 to-red-700"
->
-  Logout
-</button>
-
-          </div>
+          <button
+            onClick={handleLogout}
+            className="py-1 px-4 rounded-md text-white transform transition-transform hover:scale-110 bg-gradient-to-r from-primary to-secondary"
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+            Logout
+          </button>
         </div>
-      </nav>
+      </div>
+    </nav>
+   {/* Feedback Form Modal */}
+      {showFeedbackForm && (
+        <FeedbackForm onClose={() => setShowFeedbackForm(false)} />
+      )}
 
-      <Carousel />
+      {/* Carousel */}
+      {!showFavorites && !showConfirmedOrders && !showBuyModal && (
+        <Carousel />
+      )}
+
+
 
       {/* Main Content */}
       <div className="p-8 mt-10">
-        <h1 className="text-5xl sm:text-5xl text-center font-bold mb-5 italic">BOOKS</h1>
+        <h1 className="text-5xl sm:text-5xl text-center font-bold mb-5 italic">AVAILABLE BOOKS</h1>
         {/* Search Input */}
         <div className="mb-8 relative">
           <input
@@ -228,125 +257,117 @@ const BookList = () => {
         {/* Book Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {paginatedBooks.map((book) => (
-            <div key={book._id} className="p-4 border border-gray-300 rounded-md bg-gray-300" style={{ height: '560px', width: '300px' }}>
+            <div key={book._id}   className="relative p-4 border border-gray-300 rounded-md bg-gray-300 hover:bg-gradient-to-r from-primary to-secondary hover:text-white transition-colors duration-300" style={{ height: '530px', width: '300px' }}>
               <div style={{ height: '250px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
                 <img
-                                  src={book.imageUrl}
-                                    alt={book.name}
-                                    className="object-contain w-full h-full transition-transform duration-300 transform hover:scale-105"
-                                  />
-                                </div>
-                                <div className="p-2">
-                                  <h3 className="text-2xl font-semibold mb-2">{book.name}</h3>
-                                  <p className="text-lg text-gray-700 mb-2">Author: <span className="text-blue-600">{book.author}</span></p>
-                                  <p className="text-lg text-gray-700 mb-2">Publisher: <span className="text-blue-600">{book.publisher}</span></p>
-                                  <p className="text-gray-700 mb-2">Year: {book.year}</p>
-                                  <p className="text-gray-700 mb-2">Available Copies: {book.availableCopies}</p>
-                                  <div className="flex items-center justify-between">
-                                    <button onClick={() => openModal(book)} className="bg-blue-500 text-white py-1 px-2 rounded-md">View More</button>
-                                    <div className="flex items-center">
-                                      <button onClick={() => confirmOrder(book)} className="bg-green-500 text-white py-1 px-2 rounded-md">Buy Now</button>
-                                    </div>
-                                    <div className="flex items-center">
-                                      <button onClick={() => toggleLike(book._id)}>
-                                        <FontAwesomeIcon
-                                          icon={likedBooks[book._id] ? faHeartSolid : faHeartRegular}
-                                          className={`text-2xl ${likedBooks[book._id] ? 'text-red-500' : 'text-gray-500'}`}
-                                        />
-                                      </button>
-                                      {/* Delete like button */}
-                                      {showFavorites && likedBooks[book._id] && (
-                                        <button onClick={() => deleteLike(book._id)} className="ml-2 text-red-500">
-                                          <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                      )}
-                                      {/* Delete confirmed order button */}
-                                      {showConfirmedOrders && confirmedOrders[book._id] && (
-                                        <button onClick={() => deleteConfirmedOrder(book._id)} className="ml-2 text-red-500">
-                                          <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          {/* Pagination */}
-                          {totalPages > 1 && (
-                            <div className="flex justify-center mt-8">
-                              <nav className="bg-white rounded-lg border border-gray-300">
-                                <ul className="flex">
-                                  {/* Previous button */}
-                                  <li>
-                                    <button
-                                      onClick={() => setCurrentPage(currentPage - 1)}
-                                      className={`py-2 px-4 bg-gray-200 ${
-                                        currentPage === 1 ? 'cursor-not-allowed' : 'hover:bg-gray-300'
-                                      }`}
-                                      disabled={currentPage === 1}
-                                    >
-                                      Previous
-                                    </button>
-                                  </li>
-                                  {/* Page numbers */}
-                                  {Array.from({ length: totalPages > PAGINATION_MAX_PAGES ? PAGINATION_MAX_PAGES : totalPages }, (_, index) => index + 1).map(page => (
-                                    <li key={page}>
-                                      <button
-                                        onClick={() => handleClickPage(page)}
-                                        className={`py-2 px-4 bg-gray-200 ${
-                                          currentPage === page ? 'bg-blue-500 text-white' : 'hover:bg-gray-300'
-                                        }`}
-                                      >
-                                        {page}
-                                      </button>
-                                    </li>
-                                  ))}
-                                  {/* Next button */}
-                                  <li>
-                                    <button
-                                      onClick={() => setCurrentPage(currentPage + 1)}
-                                      className={`py-2 px-4 bg-gray-200 ${
-                                        currentPage === totalPages ? 'cursor-not-allowed' : 'hover:bg-gray-300'
-                                      }`}
-                                      disabled={currentPage === totalPages}
-                                    >
-                                      Next
-                                    </button>
-                                  </li>
-                                </ul>
-                              </nav>
-                            </div>
-                          )}
-                        </div>
-                        {/* Buy Modal */}
-                        {showBuyModal && (
-                          <BuyModal
-                            book={buyModalBook}
-                            onClose={() => setShowBuyModal(false)}
-                            onConfirm={() => handleConfirmOrder(buyModalBook)}
-                            userId={userId}
-                          />
-                        )}
-                        {/* View More Modal */}
-                        {selectedBook && (
-                          <ModalWrapper onClose={closeModal}>
-                            <div className="flex flex-col items-center">
-                              <img src={selectedBook.imageUrl} alt={selectedBook.name} className="w-96 h-56 mb-4" />
-                              <h2 className="text-2xl font-semibold mb-2">{selectedBook.name}</h2>
-                              <p>Author: {selectedBook.author}</p>
-                              <p>Year: {selectedBook.year}</p>
-                              <p>Price: {price}</p> {/* Displaying the price */}
-                              <p>Description: {selectedBook.description}</p>
-                            </div>
-                          </ModalWrapper>
-                        )}
-                        <BookInquiryForm />
-                        <Footer />
-                        <OrderPopup orderPopup={orderPopup} setOrderPopup={setOrderPopup} />
-                      </div>
-                    );
-                  };
-                  
-                  export default BookList;
-                  
+                  src={book.imageUrl}
+                  alt={book.name}
+                  className="object-contain w-full h-full transition-transform duration-300 transform hover:scale-105"
+                />
+              </div>
+              <div className="p-2 hover:text-white">
+                <h3 className="text-2xl font-semibold mb-2">{book.name}</h3>
+                <p className="text-lg text-gray-700 mb-2">Author: <span className="text-blue-600">{book.author}</span></p>
+                <p className="text-lg text-gray-700 mb-2">Publisher: <span className="text-blue-600">{book.publisher}</span></p>
+                <p className="text-gray-700 mb-2">Year: {book.year}</p>
+                <p className="text-gray-700 mb-2">Available Copies: {book.availableCopies}</p>
+                <div className="flex items-center justify-between">
+                  <button onClick={() => openModal(book)} className="bg-blue-500 text-white py-1 px-2 rounded-md">View More</button>
+                  <div className="flex items-center">
+                    <button onClick={() => confirmOrder(book)} className="bg-green-500 text-white py-1 px-2 rounded-md">Buy Now</button>
+                  </div>
+                  <div className="flex items-center">
+                    <button onClick={() => toggleLike(book._id)}>
+                      <FontAwesomeIcon
+                        icon={likedBooks[book._id] ? faHeartSolid : faHeartRegular}
+                        className={`text-2xl ${likedBooks[book._id] ? 'text-red-500' : 'text-gray-500'}`}
+                      />
+                    </button>
+                   
+                    {/* Delete confirmed order button */}
+                    {showConfirmedOrders && confirmedOrders[book._id] && (
+                      <button onClick={() => deleteConfirmedOrder(book._id)} className="ml-2 text-red-500">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-8">
+            <nav className="bg-white rounded-lg border border-gray-300">
+              <ul className="flex">
+                {/* Previous button */}
+                <li>
+                  <button
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    className={`py-2 px-4 bg-gray-200 ${currentPage === 1 ? 'cursor-not-allowed' : 'hover:bg-gray-300'}`}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                </li>
+                {/* Page numbers */}
+                {Array.from({ length: totalPages > PAGINATION_MAX_PAGES ? PAGINATION_MAX_PAGES : totalPages }, (_, index) => index + 1).map(page => (
+                  <li key={page}>
+                    <button
+                      onClick={() => handleClickPage(page)}
+                      className={`py-2 px-4 bg-gray-200 ${currentPage === page ? 'bg-blue-500 text-white' : 'hover:bg-gray-300'}`}
+                    >
+                      {page}
+                    </button>
+                  </li>
+                ))}
+                {/* Next button */}
+                <li>
+                  <button
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    className={`py-2 px-4 bg-gray-200 ${currentPage === totalPages ? 'cursor-not-allowed' : 'hover:bg-gray-300'}`}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        )}
+      </div>
+      {/* Buy Modal */}
+      {showBuyModal && (
+        <BuyModal
+          book={buyModalBook}
+          onClose={() => setShowBuyModal(false)}
+          onConfirm={() => handleConfirmOrder(buyModalBook)}
+          userId={userId}
+        />
+      )}
+      {/* View More Modal */}
+      {selectedBook && (
+        <ModalWrapper onClose={closeModal}>
+          <div className="flex flex-col items-center">
+            <img src={selectedBook.imageUrl} alt={selectedBook.name} className="w-96 h-56 mb-4" />
+            <h2 className="text-2xl font-semibold mb-2">{selectedBook.name}</h2>
+            <p>Author: {selectedBook.author}</p>
+            <p>Year: {selectedBook.year}</p>
+            <p>Price: {price}</p> {/* Displaying the price */}
+            <p>Description: {selectedBook.description}</p>
+          </div>
+        </ModalWrapper>
+      )}
+
+{!showFavorites && !showConfirmedOrders && !showBuyModal && (
+      <BookInquiryForm />
+      )}
+       
+        <Footer />
+      <OrderPopup orderPopup={orderPopup} setOrderPopup={setOrderPopup} />
+    </div>
+  );
+};
+
+export default BookList;

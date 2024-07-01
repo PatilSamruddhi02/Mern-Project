@@ -19,8 +19,8 @@ const FooterLinks = [
     link: "/about",
   },
   {
-    title: "Best Places",
-    link: "/best-places",
+    title: "Books",
+    link: "/books",
   },
   {
     title: "Blogs",
@@ -47,11 +47,9 @@ const Footer = () => {
                 <img src={FooterLogo} alt="" className="max-h-[60px]" />
                 {/* TravelloGo */}
               </h1>
-              <p className="text-sm">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
-                facere ab hic accusamus omnis dolor voluptatibus illo, tempore
-                eum tenetur.
-              </p>
+              <p className="text-sm text-justify" >
+Welcome to PoloBooks Online Shop, your ultimate destination for discovering the world of literature. Dive into our extensive collection of books spanning genres from classic literature to contemporary fiction, non-fiction, thrillers, and more.
+</p>
               <br />
               <div className="flex items-center gap-3 ">
                 <FaLocationArrow />
